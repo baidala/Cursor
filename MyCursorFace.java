@@ -17,7 +17,9 @@ public class MyCursorFace extends ArrayList<HashMap<String, String>> implements 
     private int position;
     
     MyCursorFace (String[] values) {
+        super();
         this.cursorKeys = values;
+        this.position = 0;
     }
 
     @Override
@@ -42,6 +44,16 @@ public class MyCursorFace extends ArrayList<HashMap<String, String>> implements 
 
     @Override
     public void printItemCursor(int pos) {
+        HashMap<String, String> local = new HashMap<String, String>();
+        try {
+            local = this.getItem(pos);
+            for (int i = 0; i < cursorKeys.length ; i++) {
+                System.out.println( cursorKeys[i] +":"+ local.get(cursorKeys[i]));
+                
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("ERROR: No such position."); 
+        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -72,9 +84,20 @@ public class MyCursorFace extends ArrayList<HashMap<String, String>> implements 
         
         
     }
+    private HashMap<String, String>  createHashItem(String[] values) {
+        HashMap<String, String> localMap = new HashMap<String, String>();
+        
+        for (int i = 0; i < cursorKeys.length; i++) {
+            localMap.put(cursorKeys[i], values[i]);
+        }
+        return localMap;
+    }
 
     @Override
     public void updatePosition(int pos, String[] values) {
+        this.deletePosition(pos);
+        this.insert(pos, values);
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -104,7 +127,13 @@ public class MyCursorFace extends ArrayList<HashMap<String, String>> implements 
 
     @Override
     public void insert(int pos, String[] values) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try {
+            this.add(pos, this.createHashItem(values));
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("ERROR: No such position.");
+        };
+        
     }
 
     @Override
